@@ -29,7 +29,7 @@ const AddTodo = ({ addTodo }) => {
 			<HStack mt="8">
 				<Input variant="filled" placeholder="Ingrese tarea..." value={content} onChange={(e) => setContent(e.target.value)} />
 				<Button colorScheme="pink" px="8" type="submit">
-					Add Todo
+					Agregar Tarea
 				</Button>
 			</HStack>
 		</form>

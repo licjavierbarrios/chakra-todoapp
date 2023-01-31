@@ -27,9 +27,10 @@ const App = () => {
 				size="lg"
 				onClick={toggleColorMode}
 			/>
-			<Heading mb="8px" size="2xl" fontWeight="extrabold" bgGradient="linear(to-r, red, salmon, pink)" bgClip="text">
-				Tareas Application
+			<Heading mb={8} size="2xl" fontWeight="extrabold" bgGradient="linear(to-r, red, salmon, pink)" bgClip="text">
+				Aplicación de Tareas
 			</Heading>
+
 			<TodoList todos={todos} deleteTodo={deleteTodo} />
 			<AddTodo addTodo={addTodo} />
 		</VStack>
