@@ -11,9 +11,9 @@ const AddTodo = ({ addTodo }) => {
 			id: nanoid(),
 			body: content,
 		};
-		if (content.length < 4) {
+		if (content.length < 3) {
 			toast({
-				title: "Todo is empty or too short, minimum 4 characters.",
+				title: "Tarea vacia o demasiado corta, mínimo 3 caracteres.",
 				status: "error",
 				duration: 2000,
 				isClosable: true,
@@ -27,7 +27,7 @@ const AddTodo = ({ addTodo }) => {
 	return (
 		<form onSubmit={handleSubmit}>
 			<HStack mt="8">
-				<Input variant="filled" placeholder="Enter something ..." value={content} onChange={(e) => setContent(e.target.value)} />
+				<Input variant="filled" placeholder="Ingrese tarea..." value={content} onChange={(e) => setContent(e.target.value)} />
 				<Button colorScheme="pink" px="8" type="submit">
 					Add Todo
 				</Button>

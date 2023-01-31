@@ -5,7 +5,7 @@ const TodoList = ({ todos, deleteTodo }) => {
 	if (!todos.length) {
 		return (
 			<Badge colorScheme="green" p="4" m="4" borderRadius="lg">
-				No todos!!!
+				No hay tareas!!!
 			</Badge>
 		);
 	}

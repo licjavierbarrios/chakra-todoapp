@@ -28,7 +28,7 @@ const App = () => {
 				onClick={toggleColorMode}
 			/>
 			<Heading mb="8px" size="2xl" fontWeight="extrabold" bgGradient="linear(to-r, red, salmon, pink)" bgClip="text">
-				Todo Application
+				Tareas Application
 			</Heading>
 			<TodoList todos={todos} deleteTodo={deleteTodo} />
 			<AddTodo addTodo={addTodo} />
