@@ -43,7 +43,7 @@ const App = () => {
 			</Heading>
 			<Spacer />
 			<TodoList todos={todos} deleteTodo={deleteTodo} underlineTodo={underlineTodo} colorMode={colorMode} setTodos={setTodos} />
-			<AddTodo addTodo={addTodo} />
+			<AddTodo addTodo={addTodo} colorMode={colorMode} />
 		</VStack>
 	);
 };

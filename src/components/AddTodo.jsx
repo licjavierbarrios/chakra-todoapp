@@ -1,7 +1,7 @@
 import { HStack, Input, Button, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { nanoid } from "nanoid";
-const AddTodo = ({ addTodo }) => {
+const AddTodo = ({ addTodo, colorMode }) => {
 	const [content, setContent] = useState("");
 	const toast = useToast();
 
@@ -29,7 +29,13 @@ const AddTodo = ({ addTodo }) => {
 	return (
 		<form onSubmit={handleSubmit}>
 			<HStack mt="8">
-				<Input variant="filled" placeholder="Ingrese tarea..." value={content} onChange={(e) => setContent(e.target.value)} />
+				<Input
+					variant="filled"
+					placeholder="Ingrese tarea..."
+					value={content}
+					onChange={(e) => setContent(e.target.value)}
+					_placeholder={{ color: colorMode === "light" ? "gray.800" : "gray.300" }}
+				/>
 				<Button colorScheme="pink" px="8" type="submit">
 					Agregar Tarea
 				</Button>
