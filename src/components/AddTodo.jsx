@@ -7,9 +7,11 @@ const AddTodo = ({ addTodo }) => {
 
 	function handleSubmit(e) {
 		e.preventDefault();
+
 		const todo = {
 			id: nanoid(),
 			body: content,
+			completed: false,
 		};
 		if (content.length < 3) {
 			toast({
