@@ -1,8 +1,8 @@
 import { HStack, Input, Button, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { nanoid } from "nanoid";
-const AddTodo = ({ addTodo, colorMode }) => {
-	const [content, setContent] = useState("");
+const AddTodo = ({ addTodo, colorMode, content, setContent, edit, setTodos, todos, setEdit }) => {
+	// const [content, setContent] = useState("");
 	const toast = useToast();
 
 	function handleSubmit(e) {
@@ -22,7 +22,37 @@ const AddTodo = ({ addTodo, colorMode }) => {
 			});
 			return;
 		}
-		addTodo(todo);
+
+		if (edit.id !== null) {
+			setTodos(
+				todos.map((todo) => {
+					if (todo.id === edit.id) {
+						return { ...todo, body: content };
+					}
+					return todo;
+				})
+			);
+			setEdit({
+				id: null,
+				body: "",
+			});
+			return;
+		} else {
+			// verificar que no haya tareas repetidas
+			const todoExist = todos.find((todo) => todo.body === content);
+			if (todoExist) {
+				toast({
+					title: "Tarea ya existente.",
+					status: "error",
+					duration: 2000,
+					isClosable: true,
+				});
+				return;
+			}
+
+			addTodo(todo);
+		}
+
 		setContent("");
 	}
 
@@ -35,9 +65,10 @@ const AddTodo = ({ addTodo, colorMode }) => {
 					value={content}
 					onChange={(e) => setContent(e.target.value)}
 					_placeholder={{ color: colorMode === "light" ? "gray.800" : "gray.300" }}
+					_focus={{ borderColor: "pink.500" }}
 				/>
-				<Button colorScheme="pink" px="8" type="submit">
-					Agregar Tarea
+				<Button colorScheme="pink" px="8" type="submit" onClick={handleSubmit}>
+					{edit.body !== "" ? "Editar tarea" : "Agregar tarea"}
 				</Button>
 			</HStack>
 		</form>

@@ -1,8 +1,8 @@
 import React from "react";
 import { VStack, Spacer, HStack, IconButton, Text, StackDivider, Badge } from "@chakra-ui/react";
-import { FaTrash, FaBars } from "react-icons/fa";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
-const TodoList = ({ todos, setTodos, deleteTodo, underlineTodo, colorMode }) => {
+const TodoList = ({ todos, setTodos, deleteTodo, underlineTodo, colorMode, setEdit }) => {
 	// Save reference for dragItem and dragOverItem
 	const dragItem = React.useRef();
 	const dragOverItem = React.useRef();
@@ -64,7 +64,6 @@ const TodoList = ({ todos, setTodos, deleteTodo, underlineTodo, colorMode }) => 
 					onDragOver={(e) => e.preventDefault()}
 					onDragLeave={(e) => e.preventDefault()}
 				>
-					<IconButton icon={<FaBars />} color={colorMode === "light" ? "black" : "gray.200"} isRound="true" cursor="grab" />
 					<Text
 						onClick={() => underlineTodo(todo.id)}
 						textDecoration={todo.completed ? "line-through" : "none"}
@@ -76,6 +75,14 @@ const TodoList = ({ todos, setTodos, deleteTodo, underlineTodo, colorMode }) => 
 						{todo.body}
 					</Text>
 					<Spacer />
+					<IconButton
+						icon={<FaEdit />}
+						color={colorMode === "light" ? "black" : "gray.200"}
+						isRound="true"
+						cursor="grab"
+						onClick={() => setEdit({ id: todo.id, body: todo.body })}
+					/>
+
 					<IconButton
 						icon={<FaTrash />}
 						color={colorMode === "light" ? "black" : "gray.200"}
