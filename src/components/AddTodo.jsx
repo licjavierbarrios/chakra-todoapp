@@ -68,7 +68,7 @@ const AddTodo = ({ addTodo, colorMode, content, setContent, edit, setTodos, todo
 					_focus={{ borderColor: "pink.500" }}
 				/>
 				<Button colorScheme="pink" px="8" type="submit" onClick={handleSubmit}>
-					{edit.body !== "" ? "Editar tarea" : "Agregar tarea"}
+					{edit.body !== "" ? "Editar" : "Agregar"}
 				</Button>
 			</HStack>
 		</form>

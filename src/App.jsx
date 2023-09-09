@@ -64,17 +64,9 @@ const App = () => {
 				onClick={toggleColorMode}
 			/>
 			<Heading size="2xl" fontWeight="extrabold" bgGradient="linear(to-r, red, salmon, pink)" bgClip="text">
-				Aplicación de Tareas
+				Todo App
 			</Heading>
 			<Spacer />
-			<TodoList
-				todos={todos}
-				deleteTodo={deleteTodo}
-				underlineTodo={underlineTodo}
-				colorMode={colorMode}
-				setTodos={setTodos}
-				setEdit={setEdit}
-			/>
 			<AddTodo
 				addTodo={addTodo}
 				setTodos={setTodos}
@@ -86,6 +78,15 @@ const App = () => {
 				todos={todos}
 				setEdit={setEdit}
 			/>
+			<TodoList
+				todos={todos}
+				deleteTodo={deleteTodo}
+				underlineTodo={underlineTodo}
+				colorMode={colorMode}
+				setTodos={setTodos}
+				setEdit={setEdit}
+			/>
+			
 		</VStack>
 	);
 };
