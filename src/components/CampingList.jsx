@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { VStack, HStack, Text, Checkbox } from "@chakra-ui/react";
+import campingItems from "../data/campingItems";
 
 const CampingList = () => {
-  const initialItems = [
-    { id: 1, name: "Carpa", completed: false },
-    { id: 2, name: "Bolsa de dormir", completed: false },
-    { id: 3, name: "Linterna", completed: false },
-    // Agrega más elementos según sea necesario
-  ];
+  
 
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState(campingItems);
 
   const toggleItemCompletion = (id) => {
     setItems(
