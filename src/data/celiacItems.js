@@ -1,5 +1,17 @@
 const celiacItems = [
   {
+    id: 1,
+    name: "Polvo de hornear",
+    completed: false,
+    maxQuantity: 1,
+  },
+  {
+    id: 2,
+    name: "Maicena",
+    completed: false,
+    maxQuantity: 1,
+  },
+  {
     id: 3,
     name: "Arroz",
     completed: false,
