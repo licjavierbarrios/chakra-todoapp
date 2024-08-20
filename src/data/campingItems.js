@@ -1,6 +1,6 @@
 const campingItems = [
   { id: 1, name: "Aceite", completed: false },
-  { id: 2, name: "Azucarera", completed: false },
+  { id: 31, name: "Bowl", completed: false },
   { id: 3, name: "Carbon o leña", completed: false },
   { id: 4, name: "Cartas - Juegos", completed: false },
   { id: 5, name: "Chocolate", completed: false },
@@ -29,7 +29,7 @@ const campingItems = [
   { id: 28, name: "Toalla de mano", completed: false },
   { id: 29, name: "Vasos", completed: false },
   { id: 30, name: "Vinagre", completed: false },
-  { id: 31, name: "Bowl", completed: false },
+  { id: 2, name: "Azucarera", completed: false },
 ];
 
 export default campingItems;
