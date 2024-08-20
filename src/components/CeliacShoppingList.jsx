@@ -5,19 +5,18 @@ import {
   Text,
   Checkbox,
   Input,
-  Table,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Thead,
-  TableContainer,
+  Divider,
   Box,
+  Button,
+  useToast,
 } from "@chakra-ui/react";
 import celiacItems from "../data/celiacItems";
+import { nanoid } from "nanoid";
 
 const CeliacShoppingList = () => {
   const [items, setItems] = useState(celiacItems);
+  const [newItemName, setNewItemName] = useState("");
+  const toast = useToast();
 
   const handleToggle = (id) => {
     setItems(
@@ -64,103 +63,101 @@ const CeliacShoppingList = () => {
       .toFixed(2);
   };
 
+  const handleAddItem = () => {
+    if (newItemName.length < 3) {
+      toast({
+        title: "Nombre inválido.",
+        description: "El nombre del ítem debe tener al menos 3 caracteres.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const newItem = {
+      id: nanoid(),
+      name: newItemName,
+      completed: false,
+      quantity: 1,
+      price: "0.00",
+      maxQuantity: 10,
+    };
+    setItems([newItem, ...items]);
+    setNewItemName(""); // Limpia el input después de agregar el ítem
+    toast({
+      title: "Item agregado.",
+      description: `Se ha agregado "${newItemName}" a la lista.`,
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
   return (
-    <VStack>
-      <TableContainer w="100%" overflowX="auto">
-        <Table variant="simple" size="sm">
-          <Thead display={{ base: "none", md: "table-header-group" }}>
-            <Tr>
-              <Th>Comprar</Th>
-              <Th>Item</Th>
-              <Th isNumeric>Cantidad</Th>
-              <Th isNumeric>Precio (ARS)</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {items.map((item) => (
-              <Tr
-                key={item.id}
-                display={{ base: "flex", md: "table-row" }}
-                flexDirection={{ base: "column", md: "row" }}
-              >
-                <Td
-                  display={{ base: "flex", md: "table-cell" }}
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Text
-                    display={{ base: "block", md: "none" }}
-                    fontWeight="bold"
-                  >
-                    Comprar
-                  </Text>
-                  <Checkbox
-                    isChecked={item.completed}
-                    onChange={() => handleToggle(item.id)}
-                  />
-                </Td>
-                <Td
-                  display={{ base: "flex", md: "table-cell" }}
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Text
-                    display={{ base: "block", md: "none" }}
-                    fontWeight="bold"
-                  >
-                    Item
-                  </Text>
-                  <Text as={item.completed ? "s" : "span"}>{item.name}</Text>
-                </Td>
-                <Td
-                  display={{ base: "flex", md: "table-cell" }}
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Text
-                    display={{ base: "block", md: "none" }}
-                    fontWeight="bold"
-                  >
-                    Cantidad
-                  </Text>
-                  <Input
-                    type="number"
-                    min="1"
-                    max={item.maxQuantity}
-                    value={item.quantity || ""}
-                    onChange={(e) =>
-                      handleQuantityChange(item.id, e.target.value)
-                    }
-                    isDisabled={!item.completed}
-                    w="70px"
-                  />
-                </Td>
-                <Td
-                  display={{ base: "flex", md: "table-cell" }}
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Text
-                    display={{ base: "block", md: "none" }}
-                    fontWeight="bold"
-                  >
-                    Precio (ARS)
-                  </Text>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={item.price || ""}
-                    onChange={(e) => handlePriceChange(item.id, e.target.value)}
-                    onBlur={() => handlePriceBlur(item.id)}
-                    isDisabled={!item.completed}
-                    w="70px"
-                  />
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+    <VStack spacing={4} align="stretch">
+      <HStack>
+        <Input
+          placeholder="Ingrese el nombre del ítem"
+          value={newItemName}
+          onChange={(e) => setNewItemName(e.target.value)}
+        />
+        <Button colorScheme="pink" onClick={handleAddItem}>
+          Agregar
+        </Button>
+      </HStack>
+
+      {items.map((item) => (
+        <Box key={item.id} p={2} borderWidth="1px" borderRadius="md">
+          <HStack justifyContent="space-between" alignItems="center">
+            <Checkbox
+              isChecked={item.completed}
+              onChange={() => handleToggle(item.id)}
+            />
+            <VStack align="start" spacing={1}>
+              <Text fontWeight={item.completed ? "bold" : "normal"}>
+                {item.name}
+              </Text>
+              <Text fontSize="sm" color="gray.500">
+                Cantidad:{" "}
+                <Input
+                  type="number"
+                  min="1"
+                  max={item.maxQuantity}
+                  value={item.quantity || ""}
+                  onChange={(e) =>
+                    handleQuantityChange(item.id, e.target.value)
+                  }
+                  isDisabled={!item.completed}
+                  size="sm"
+                  w="60px"
+                  placeholder={item.maxQuantity}
+                  _placeholder={{ color: "gray.400" }}
+                />
+              </Text>
+            </VStack>
+            <VStack align="end" spacing={1}>
+              <Text fontWeight={item.completed ? "bold" : "normal"}>
+                Precio:{" "}
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={item.price || ""}
+                  onChange={(e) => handlePriceChange(item.id, e.target.value)}
+                  onBlur={() => handlePriceBlur(item.id)}
+                  isDisabled={!item.completed}
+                  size="sm"
+                  w="80px"
+                  placeholder="$0.00"
+                  _placeholder={{ color: "gray.400" }}
+                />
+              </Text>
+            </VStack>
+          </HStack>
+          <Divider mt={2} />
+        </Box>
+      ))}
+
       <HStack w="100%" justify="flex-end" p={4}>
         <Text fontWeight="bold">Total:</Text>
         <Text>${calculateTotal()}</Text>
