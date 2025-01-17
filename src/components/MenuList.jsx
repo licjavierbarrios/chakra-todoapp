@@ -9,7 +9,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import TodoList from "./TodoList";
-import CeliacShoppingList from "./CeliacShoppingList";
+import CeliacShoppingList from "./ShoppingList/CeliacShoppingList";
 import CampingList from "./CampingList";
 import AddTodo from "./AddTodo";
 
