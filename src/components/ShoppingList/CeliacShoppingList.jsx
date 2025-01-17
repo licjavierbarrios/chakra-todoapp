@@ -172,8 +172,8 @@ const CeliacShoppingList = () => {
       spacing={4}
       align="stretch"
       w="100%"
+      h="100vh"
       px={{ base: 4, md: 8 }}
-      maxH="80vh"
       overflowY="auto"
     >
       <Stack spacing={2} direction={{ base: "column", md: "row" }} w="100%">
@@ -209,8 +209,20 @@ const CeliacShoppingList = () => {
       </Box>
 
       {/* Total */}
-      <HStack w="100%" justify="flex-end" p={4}>
-        <TotalDisplay total={calculateTotal()} />
+      <HStack w="100%" justify="flex-end" >
+        <Box
+          w="100%"
+          bg="white"
+          position="fixed"
+          bottom="0"
+          boxShadow="md"
+          zIndex="10"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <TotalDisplay total={calculateTotal()} />
+        </Box>
       </HStack>
     </VStack>
   );
