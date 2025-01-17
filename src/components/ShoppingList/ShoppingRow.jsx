@@ -23,41 +23,45 @@ const ShoppingRow = ({
 }) => {
   return (
     <Tr>
-      <Td>
+      <Td p={1}>
         <Checkbox
+          size="sm"
           isChecked={item.completed}
           onChange={() => onToggle(item.id)}
         />
       </Td>
-      <Td>
-        <Text fontWeight={item.completed ? "bold" : "normal"}>{item.name}</Text>
+      <Td >
+        <Text fontSize="xs" fontWeight={item.completed ? "bold" : "normal"}>
+          {item.name}
+        </Text>
       </Td>
-      <Td isNumeric>
-        <HStack spacing={2} justify="flex-end">
+      <Td isNumeric p={1}>
+        <HStack spacing={1} justify="flex-end">
           <IconButton
             size="xs"
             aria-label="Decrementar cantidad"
-            icon={<MinusIcon />}
+            icon={<MinusIcon boxSize={3} />}
             onClick={() => onDecrement(item.id)}
             isDisabled={!item.completed}
           />
-          <Text width="20px" textAlign="center">
+          <Text width="16px" fontSize="sm" textAlign="center">
             {item.quantity}
           </Text>
           <IconButton
             size="xs"
             aria-label="Incrementar cantidad"
-            icon={<AddIcon />}
+            icon={<AddIcon boxSize={3} />}
             onClick={() => onIncrement(item.id)}
             isDisabled={!item.completed}
           />
         </HStack>
       </Td>
-      <Td isNumeric>
+      <Td isNumeric p={1}>
         <Input
           textAlign="right"
-          width="80px"
-          size="sm"
+          width="60px"
+          size="xs"
+          fontSize="sm"
           type="number"
           step="0.01"
           value={item.price}

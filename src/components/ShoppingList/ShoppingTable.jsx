@@ -14,13 +14,21 @@ const ShoppingTable = ({
   onPriceBlur,
 }) => {
   return (
-    <Table variant="simple" size="sm">
+    <Table variant="simple" size="sm" width="100%" tableLayout="fixed">
       <Thead>
         <Tr>
-          <Th>✓</Th>
-          <Th>Item</Th>
-          <Th isNumeric>Cant.</Th>
-          <Th isNumeric>Precio</Th>
+          <Th width="5%" textAlign="center" p={1}>
+            ✓
+          </Th>
+          <Th width="45%" p={1}>
+            Item
+          </Th>
+          <Th width="20%" isNumeric p={1}>
+            Cant.
+          </Th>
+          <Th width="20%" isNumeric p={1}>
+            Precio
+          </Th>
         </Tr>
       </Thead>
       <Tbody>

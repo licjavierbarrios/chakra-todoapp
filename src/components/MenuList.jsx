@@ -27,7 +27,7 @@ const MenuList = ({
   setTodos,
 }) => {
   return (
-    <Tabs variant="soft-rounded" colorScheme="pink" align="center" isFitted>
+    <Tabs variant="soft-rounded" colorScheme="pink" align="start" isFitted>
       <TabList>
         <Tab>Lista de Tareas</Tab>
         <Tab>Lista Celíaco</Tab>

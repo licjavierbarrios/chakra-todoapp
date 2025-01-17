@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  Box,
   InputGroup,
   Input,
   InputRightElement,
@@ -15,24 +16,26 @@ const SearchBar = ({ searchTerm, onSearchTermChange }) => {
   };
 
   return (
-    <InputGroup>
-      <Input
-        placeholder="Buscar..."
-        value={searchTerm}
-        onChange={(e) => onSearchTermChange(e.target.value)}
-      />
-      {searchTerm && (
-        <InputRightElement width="2.5rem">
-          <IconButton
-            size="sm"
-            icon={<CloseIcon />}
-            variant="ghost"
-            onClick={handleClear}
-            aria-label="Borrar búsqueda"
-          />
-        </InputRightElement>
-      )}
-    </InputGroup>
+    <Box w="100%" px={{ base: 2, md: 8 }}>
+      <InputGroup>
+        <Input
+          placeholder="Buscar..."
+          value={searchTerm}
+          onChange={(e) => onSearchTermChange(e.target.value)}
+        />
+        {searchTerm && (
+          <InputRightElement width="2.5rem">
+            <IconButton
+              size="sm"
+              icon={<CloseIcon />}
+              variant="ghost"
+              onClick={handleClear}
+              aria-label="Borrar búsqueda"
+            />
+          </InputRightElement>
+        )}
+      </InputGroup>
+    </Box>
   );
 };
 
