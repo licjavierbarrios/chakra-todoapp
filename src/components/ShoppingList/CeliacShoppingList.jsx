@@ -168,8 +168,8 @@ const CeliacShoppingList = () => {
   };
 
   return (
-    <VStack spacing={4} align="stretch">
-      <Stack spacing={2} direction="column">
+    <VStack spacing={4} align="stretch" w="100%" px={2}>
+      <Stack spacing={2} direction={{ base: "column", md: "row" }} w="100%">
         {/* Barra de búsqueda */}
         <SearchBar searchTerm={searchTerm} onSearchTermChange={setSearchTerm} />
 
@@ -182,7 +182,7 @@ const CeliacShoppingList = () => {
       </Stack>
 
       {/* Tabla con los items filtrados */}
-      <Box borderWidth="1px" borderRadius="md" p={2}>
+      <Box w="100%" overflowX="auto" borderWidth="1px" borderRadius="md" p={2}>
         <ShoppingTable
           items={filteredItems}
           onToggle={handleToggle}
