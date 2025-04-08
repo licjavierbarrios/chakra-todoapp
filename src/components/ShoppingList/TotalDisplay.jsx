@@ -6,8 +6,8 @@ import formatCurrency from "../../utils/formatCurrency";
 
 const TotalDisplay = ({ total }) => {
   return (
-    <HStack spacing={2}>
-      <Text fontWeight="bold">Total:</Text>
+    <HStack spacing={2} >
+      <Text textAlign="center"fontWeight="bold">Total:</Text>
       <Text fontSize="xl">{formatCurrency(total)}</Text>
     </HStack>
   );

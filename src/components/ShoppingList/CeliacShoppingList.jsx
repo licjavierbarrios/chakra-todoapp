@@ -1,171 +1,32 @@
 // src/components/ShoppingList/CeliacShoppingList.jsx
+import React from "react";
+import {
+  VStack,
+  HStack,
+  Box,
+  Stack,
+  Button,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+} from "@chakra-ui/react";
+import { DeleteIcon } from "@chakra-ui/icons";
 
-import React, { useState } from "react";
-import { VStack, HStack, Box, Stack, useToast } from "@chakra-ui/react";
-import { nanoid } from "nanoid";
-
-import celiacItemsData from "../../data/celiacItems";
-
-// Importamos los componentes hijos que residen en la misma carpeta
+import useCeliacShoppingList from "../../hooks/useCeliacShoppingList";
 import SearchBar from "./SearchBar";
 import AddItemForm from "./AddItemForm";
 import ShoppingTable from "./ShoppingTable";
 import TotalDisplay from "./TotalDisplay";
 
 const CeliacShoppingList = () => {
-  const toast = useToast();
+  const { filteredItems, searchTerm, newItemName, isOpen, total, handlers } =
+    useCeliacShoppingList();
 
-  // Ordenamos la lista alfabéticamente
-  const sortedItems = [...celiacItemsData].sort((a, b) =>
-    a.name.localeCompare(b.name)
-  );
-
-  // Estado inicial: cada ítem con 'completed=false', 'price="0.00"' y 'quantity=1'
-  const [items, setItems] = useState(() =>
-    sortedItems.map((item) => ({
-      ...item,
-      completed: false,
-      price: "0.00",
-      quantity: 1,
-    }))
-  );
-
-  // Estados para búsqueda y nuevo ítem
-  const [searchTerm, setSearchTerm] = useState("");
-  const [newItemName, setNewItemName] = useState("");
-
-  // Filtrar ítems según el término de búsqueda
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // --- Handlers principales ---
-
-  // Cambiar el estado 'completed'
-  const handleToggle = (id) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, completed: !item.completed } : item
-      )
-    );
-  };
-
-  // Incrementar la cantidad, respetando 'maxQuantity' si existe
-  const handleIncrement = (id) => {
-    setItems((prev) =>
-      prev.map((item) => {
-        if (item.id === id) {
-          if (item.maxQuantity !== undefined) {
-            return {
-              ...item,
-              quantity:
-                item.quantity < item.maxQuantity
-                  ? item.quantity + 1
-                  : item.quantity,
-            };
-          }
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
-      })
-    );
-  };
-
-  // Decrementar la cantidad, sin bajar de 1
-  const handleDecrement = (id) => {
-    setItems((prev) =>
-      prev.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            quantity: item.quantity > 1 ? item.quantity - 1 : 1,
-          };
-        }
-        return item;
-      })
-    );
-  };
-
-  // Manejo del precio: focus, change, blur
-  const handlePriceFocus = (id) => {
-    setItems((prev) =>
-      prev.map((item) => {
-        if (item.id === id && item.price === "0.00") {
-          return { ...item, price: "" };
-        }
-        return item;
-      })
-    );
-  };
-
-  const handlePriceChange = (id, value) => {
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, price: value } : item))
-    );
-  };
-
-  const handlePriceBlur = (id) => {
-    setItems((prev) =>
-      prev.map((item) => {
-        if (item.id === id) {
-          const rawVal = item.price.trim();
-          // Si quedó vacío, vuelve a "0.00"
-          if (!rawVal) {
-            return { ...item, price: "0.00" };
-          }
-          // Si no está vacío, parseamos con 2 decimales
-          const parsed = parseFloat(rawVal || "0").toFixed(2);
-          return { ...item, price: parsed };
-        }
-        return item;
-      })
-    );
-  };
-
-  // Calcular el total de la compra
-  const calculateTotal = () => {
-    return items
-      .reduce((acc, item) => {
-        if (item.completed && item.quantity && item.price) {
-          return acc + item.quantity * parseFloat(item.price);
-        }
-        return acc;
-      }, 0)
-      .toFixed(2);
-  };
-
-  // Agregar un nuevo ítem
-  const handleAddItem = () => {
-    if (newItemName.length < 3) {
-      toast({
-        title: "Nombre inválido.",
-        description: "El nombre del ítem debe tener al menos 3 caracteres.",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    const newItem = {
-      id: nanoid(),
-      name: newItemName,
-      completed: false,
-      quantity: 1,
-      price: "0.00",
-      maxQuantity: 10,
-    };
-
-    setItems((prev) => [newItem, ...prev]);
-    setNewItemName("");
-    toast({
-      title: "Item agregado.",
-      description: `Se ha agregado "${newItemName}" a la lista.`,
-      status: "success",
-      duration: 2000,
-      isClosable: true,
-    });
-  };
+  
+  const cancelRef = React.useRef();
 
   return (
     <VStack
@@ -177,18 +38,17 @@ const CeliacShoppingList = () => {
       overflowY="auto"
     >
       <Stack spacing={2} direction={{ base: "column", md: "row" }} w="100%">
-        {/* Barra de búsqueda */}
-        <SearchBar searchTerm={searchTerm} onSearchTermChange={setSearchTerm} />
-
-        {/* Form para agregar un nuevo ítem */}
+        <SearchBar
+          searchTerm={searchTerm}
+          onSearchTermChange={handlers.setSearchTerm}
+        />
         <AddItemForm
           newItemName={newItemName}
-          onNewItemNameChange={setNewItemName}
-          onAddItem={handleAddItem}
+          onNewItemNameChange={handlers.setNewItemName}
+          onAddItem={handlers.handleAddItem}
         />
       </Stack>
 
-      {/* Tabla con los items filtrados */}
       <Box
         w="100%"
         maxW="100vw"
@@ -199,31 +59,68 @@ const CeliacShoppingList = () => {
       >
         <ShoppingTable
           items={filteredItems}
-          onToggle={handleToggle}
-          onIncrement={handleIncrement}
-          onDecrement={handleDecrement}
-          onPriceFocus={handlePriceFocus}
-          onPriceChange={handlePriceChange}
-          onPriceBlur={handlePriceBlur}
+          onToggle={handlers.handleToggle}
+          onIncrement={(id) => handlers.handleQuantityChange(id, "increment")}
+          onDecrement={(id) => handlers.handleQuantityChange(id, "decrement")}
+          onPriceFocus={handlers.handlePriceFocus}
+          onPriceChange={handlers.handlePriceChange}
+          onPriceBlur={handlers.handlePriceBlur}
         />
       </Box>
 
-      {/* Total */}
-      <HStack w="100%" justify="flex-end" >
-        <Box
-          w="100%"
-          bg="white"
-          position="fixed"
-          bottom="0"
-          boxShadow="md"
-          zIndex="10"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
+      <Box
+        w="80%"
+        bg="white"
+        position="fixed"
+        bottom="0"
+        boxShadow="md"
+        zIndex="10"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        py={2}
+      >
+        <TotalDisplay total={total} />
+        <Button
+          variant="ghost"
+          colorScheme="red"
+          size="sm"
+          leftIcon={<DeleteIcon />}
+          onClick={handlers.showConfirmDialog}
+          mt={1}
         >
-          <TotalDisplay total={calculateTotal()} />
-        </Box>
-      </HStack>
+          Reiniciar lista
+        </Button>
+      </Box>
+
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={handlers.closeConfirmDialog}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Reiniciar Lista
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              ¿Estás seguro? Se perderán todos los cambios realizados.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={handlers.closeConfirmDialog}>
+                Cancelar
+              </Button>
+              <Button
+                colorScheme="red"
+                onClick={handlers.handleResetList}
+                ml={3}
+              >
+                Reiniciar
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </VStack>
   );
 };
