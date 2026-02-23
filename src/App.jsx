@@ -1,13 +1,8 @@
-import {
-  VStack,
-  Heading,
-  useColorMode,
-  IconButton,
-  Spacer,
-} from "@chakra-ui/react";
-import { FaSun, FaMoon } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import MenuList from "./components/MenuList"; // Agregamos el componente MenuList
+import { Moon, Sun } from "lucide-react";
+import { Button } from "./components/ui/button";
+import { useTheme } from "./components/theme-provider";
+import MenuList from "./components/MenuList";
 
 const App = () => {
   const [todos, setTodos] = useState(
@@ -19,10 +14,16 @@ const App = () => {
     body: "",
   });
 
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { theme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
   const deleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
+
   const addTodo = (todo) => {
     setTodos([...todos, todo]);
   };
@@ -62,37 +63,39 @@ const App = () => {
   }, [edit.id]);
 
   return (
-    <VStack p={2}>
-      <IconButton
-        icon={colorMode === "light" ? <FaSun /> : <FaMoon />}
-        isRound="true"
-        alignSelf="flex-end"
-        size="lg"
-        onClick={toggleColorMode}
-      />
-      <Heading
-        size="2xl"
-        fontWeight="extrabold"
-        bgGradient="linear(to-r, red, salmon, pink)"
-        bgClip="text"
-      >
-        Todo App
-      </Heading>
-      <Spacer />
-      <MenuList
-        todos={todos}
-        deleteTodo={deleteTodo}
-        underlineTodo={underlineTodo}
-        addTodo={addTodo}
-        setEdit={setEdit}
-        colorMode={colorMode}
-        content={content}
-        setContent={setContent}
-        edit={edit}
-        upDateTodo={upDateTodo}
-        setTodos={setTodos}
-      />
-    </VStack>
+    <div className="min-h-screen p-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-red-500 via-pink-500 to-pink-400 bg-clip-text text-transparent">
+            Todo App
+          </h1>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={toggleTheme}
+            className="rounded-full"
+          >
+            {theme === "light" ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
+        <MenuList
+          todos={todos}
+          deleteTodo={deleteTodo}
+          underlineTodo={underlineTodo}
+          addTodo={addTodo}
+          setEdit={setEdit}
+          content={content}
+          setContent={setContent}
+          edit={edit}
+          upDateTodo={upDateTodo}
+          setTodos={setTodos}
+        />
+      </div>
+    </div>
   );
 };
 

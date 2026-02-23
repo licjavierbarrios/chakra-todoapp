@@ -1,19 +1,17 @@
 // src/components/ShoppingList/CeliacShoppingList.jsx
 import React from "react";
+import { Trash2 } from "lucide-react";
+import { Button } from "../ui/button";
 import {
-  VStack,
-  HStack,
-  Box,
-  Stack,
-  Button,
   AlertDialog,
-  AlertDialogBody,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
-} from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 import useCeliacShoppingList from "../../hooks/useCeliacShoppingList";
 import SearchBar from "./SearchBar";
@@ -25,19 +23,9 @@ const CeliacShoppingList = () => {
   const { filteredItems, searchTerm, newItemName, isOpen, total, handlers } =
     useCeliacShoppingList();
 
-  
-  const cancelRef = React.useRef();
-
   return (
-    <VStack
-      spacing={4}
-      align="stretch"
-      w="100%"
-      h="100vh"
-      px={{ base: 4, md: 8 }}
-      overflowY="auto"
-    >
-      <Stack spacing={2} direction={{ base: "column", md: "row" }} w="100%">
+    <div className="flex flex-col gap-4 w-full pb-[140px] md:pb-32">
+      <div className="flex flex-col md:flex-row gap-2 w-full">
         <SearchBar
           searchTerm={searchTerm}
           onSearchTermChange={handlers.setSearchTerm}
@@ -47,16 +35,9 @@ const CeliacShoppingList = () => {
           onNewItemNameChange={handlers.setNewItemName}
           onAddItem={handlers.handleAddItem}
         />
-      </Stack>
+      </div>
 
-      <Box
-        w="100%"
-        maxW="100vw"
-        overflowX="auto"
-        borderWidth="1px"
-        borderRadius="md"
-        p={2}
-      >
+      <div className="w-full overflow-x-auto border rounded-md mb-4">
         <ShoppingTable
           items={filteredItems}
           onToggle={handlers.handleToggle}
@@ -66,62 +47,40 @@ const CeliacShoppingList = () => {
           onPriceChange={handlers.handlePriceChange}
           onPriceBlur={handlers.handlePriceBlur}
         />
-      </Box>
+      </div>
 
-      <Box
-        w="80%"
-        bg="white"
-        position="fixed"
-        bottom="0"
-        boxShadow="md"
-        zIndex="10"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        py={2}
-      >
-        <TotalDisplay total={total} />
-        <Button
-          variant="ghost"
-          colorScheme="red"
-          size="sm"
-          leftIcon={<DeleteIcon />}
-          onClick={handlers.showConfirmDialog}
-          mt={1}
-        >
-          Reiniciar lista
-        </Button>
-      </Box>
+      <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-t shadow-lg z-50">
+        <div className="max-w-6xl mx-auto flex flex-col items-center py-2 md:py-4 px-4 gap-2 md:gap-3">
+          <TotalDisplay total={total} />
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handlers.showConfirmDialog}
+            className="text-destructive hover:text-destructive"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Reiniciar lista
+          </Button>
+        </div>
+      </div>
 
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={handlers.closeConfirmDialog}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Reiniciar Lista
-            </AlertDialogHeader>
-            <AlertDialogBody>
+      <AlertDialog open={isOpen} onOpenChange={handlers.closeConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reiniciar Lista</AlertDialogTitle>
+            <AlertDialogDescription>
               ¿Estás seguro? Se perderán todos los cambios realizados.
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={handlers.closeConfirmDialog}>
-                Cancelar
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={handlers.handleResetList}
-                ml={3}
-              >
-                Reiniciar
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handlers.handleResetList} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Reiniciar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
       </AlertDialog>
-    </VStack>
+    </div>
   );
 };
 

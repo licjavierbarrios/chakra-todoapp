@@ -1,10 +1,9 @@
-import { HStack, Input, Button, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { toast } from "sonner";
 import { nanoid } from "nanoid";
-const AddTodo = ({ addTodo, colorMode, content, setContent, edit, setTodos, todos, setEdit }) => {
-	// const [content, setContent] = useState("");
-	const toast = useToast();
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
+const AddTodo = ({ addTodo, content, setContent, edit, setTodos, todos, setEdit }) => {
 	function handleSubmit(e) {
 		e.preventDefault();
 
@@ -14,12 +13,7 @@ const AddTodo = ({ addTodo, colorMode, content, setContent, edit, setTodos, todo
 			completed: false,
 		};
 		if (content.length < 3) {
-			toast({
-				title: "Tarea vacia o demasiado corta, mínimo 3 caracteres.",
-				status: "error",
-				duration: 2000,
-				isClosable: true,
-			});
+			toast.error("Tarea vacía o demasiado corta, mínimo 3 caracteres.");
 			return;
 		}
 
@@ -36,41 +30,37 @@ const AddTodo = ({ addTodo, colorMode, content, setContent, edit, setTodos, todo
 				id: null,
 				body: "",
 			});
+			toast.success("Tarea actualizada correctamente");
+			setContent("");
 			return;
 		} else {
 			// verificar que no haya tareas repetidas
 			const todoExist = todos.find((todo) => todo.body === content);
 			if (todoExist) {
-				toast({
-					title: "Tarea ya existente.",
-					status: "error",
-					duration: 2000,
-					isClosable: true,
-				});
+				toast.error("Tarea ya existente.");
 				return;
 			}
 
 			addTodo(todo);
+			toast.success("Tarea agregada correctamente");
 		}
 
 		setContent("");
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<HStack mt="8">
+		<form onSubmit={handleSubmit} className="w-full">
+			<div className="flex gap-2 w-full">
 				<Input
-					variant="filled"
 					placeholder="Ingrese tarea..."
 					value={content}
 					onChange={(e) => setContent(e.target.value)}
-					_placeholder={{ color: colorMode === "light" ? "gray.800" : "gray.300" }}
-					_focus={{ borderColor: "pink.500" }}
+					className="flex-1"
 				/>
-				<Button colorScheme="pink" px="8" type="submit" onClick={handleSubmit}>
+				<Button type="submit">
 					{edit.body !== "" ? "Editar" : "Agregar"}
 				</Button>
-			</HStack>
+			</div>
 		</form>
 	);
 };

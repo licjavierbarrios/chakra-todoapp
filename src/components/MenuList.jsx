@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  VStack,
-  Box,
-} from "@chakra-ui/react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import TodoList from "./TodoList";
 import CeliacShoppingList from "./ShoppingList/CeliacShoppingList";
 import CampingList from "./CampingList";
@@ -19,7 +11,6 @@ const MenuList = ({
   underlineTodo,
   addTodo,
   setEdit,
-  colorMode,
   content,
   setContent,
   edit,
@@ -27,47 +18,40 @@ const MenuList = ({
   setTodos,
 }) => {
   return (
-    <Tabs variant="soft-rounded" colorScheme="pink" align="start" isFitted>
-      <TabList>
-        <Tab>Lista de Tareas</Tab>
-        <Tab>Lista Celíaco</Tab>
-        <Tab>Lista Camping</Tab>
-      </TabList>
+    <Tabs defaultValue="tareas" className="w-full">
+      <TabsList className="grid w-full grid-cols-3 mb-4">
+        <TabsTrigger value="tareas">Lista de Tareas</TabsTrigger>
+        <TabsTrigger value="celiaco">Lista Celíaco</TabsTrigger>
+        <TabsTrigger value="camping">Lista Camping</TabsTrigger>
+      </TabsList>
 
-      <TabPanels>
-        <TabPanel>
-          <VStack>
-            <AddTodo
-              addTodo={addTodo}
-              setTodos={setTodos}
-              colorMode={colorMode}
-              edit={edit}
-              upDateTodo={upDateTodo}
-              content={content}
-              setContent={setContent}
-              todos={todos}
-              setEdit={setEdit}
-            />
-            <TodoList
-              todos={todos}
-              deleteTodo={deleteTodo}
-              underlineTodo={underlineTodo}
-              setEdit={setEdit}
-              colorMode={colorMode}
-            />
-          </VStack>
-        </TabPanel>
-        <TabPanel>
-          <Box w="100%">
-            <CeliacShoppingList />
-          </Box>
-        </TabPanel>
-        <TabPanel>
-          <Box w="100%">
-            <CampingList />
-          </Box>
-        </TabPanel>
-      </TabPanels>
+      <TabsContent value="tareas" className="space-y-4">
+        <AddTodo
+          addTodo={addTodo}
+          setTodos={setTodos}
+          edit={edit}
+          upDateTodo={upDateTodo}
+          content={content}
+          setContent={setContent}
+          todos={todos}
+          setEdit={setEdit}
+        />
+        <TodoList
+          todos={todos}
+          deleteTodo={deleteTodo}
+          underlineTodo={underlineTodo}
+          setEdit={setEdit}
+          setTodos={setTodos}
+        />
+      </TabsContent>
+
+      <TabsContent value="celiaco">
+        <CeliacShoppingList />
+      </TabsContent>
+
+      <TabsContent value="camping">
+        <CampingList />
+      </TabsContent>
     </Tabs>
   );
 };

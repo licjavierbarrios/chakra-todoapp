@@ -1,14 +1,9 @@
 // src/components/ShoppingList/SearchBar.jsx
 
 import React from "react";
-import {
-  Box,
-  InputGroup,
-  Input,
-  InputRightElement,
-  IconButton,
-} from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
+import { X } from "lucide-react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 const SearchBar = ({ searchTerm, onSearchTermChange }) => {
   const handleClear = () => {
@@ -16,26 +11,25 @@ const SearchBar = ({ searchTerm, onSearchTermChange }) => {
   };
 
   return (
-    <Box w="100%" px={{ base: 2, md: 8 }}>
-      <InputGroup>
-        <Input
-          placeholder="Buscar..."
-          value={searchTerm}
-          onChange={(e) => onSearchTermChange(e.target.value)}
-        />
-        {searchTerm && (
-          <InputRightElement width="2.5rem">
-            <IconButton
-              size="sm"
-              icon={<CloseIcon />}
-              variant="ghost"
-              onClick={handleClear}
-              aria-label="Borrar búsqueda"
-            />
-          </InputRightElement>
-        )}
-      </InputGroup>
-    </Box>
+    <div className="relative flex-1">
+      <Input
+        placeholder="Buscar..."
+        value={searchTerm}
+        onChange={(e) => onSearchTermChange(e.target.value)}
+        className="pr-10"
+      />
+      {searchTerm && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-0 top-0 h-full"
+          onClick={handleClear}
+          aria-label="Borrar búsqueda"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      )}
+    </div>
   );
 };
 

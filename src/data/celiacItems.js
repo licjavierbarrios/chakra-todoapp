@@ -73,7 +73,7 @@ const celiacItems = [
   },
   {
     id: 7,
-    name: "Leche líquida s/ lactosa",
+    name: "Leche líquida desl. x 1l",
     completed: false,
     maxQuantity: 1,
   },
@@ -85,8 +85,7 @@ const celiacItems = [
   },
   {
     id: 8,
-    name: "Yogur sin lactosa",
-    type: "",
+    name: "Yogurt desl. x 1l",
     completed: false,
     maxQuantity: 1,
   },
@@ -105,6 +104,36 @@ const celiacItems = [
   {
     id: 22,
     name: "Yerba",
+    completed: false,
+    maxQuantity: 1,
+  },
+  {
+    id: 25,
+    name: "Crema de leche desl.",
+    completed: false,
+    maxQuantity: 1,
+  },
+  {
+    id: 26,
+    name: "Queso Cremon desl.",
+    completed: false,
+    maxQuantity: 1,
+  },
+  {
+    id: 27,
+    name: "Leche en polvo desl.",
+    completed: false,
+    maxQuantity: 1,
+  },
+  {
+    id: 28,
+    name: "Manteca x 200ml",
+    completed: false,
+    maxQuantity: 1,
+  },
+  {
+    id: 29,
+    name: "Queso sardo desl.",
     completed: false,
     maxQuantity: 1,
   },

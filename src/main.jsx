@@ -1,13 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { ThemeProvider } from "./components/theme-provider";
+import { Toaster } from "sonner";
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
-		<ChakraProvider>
-			<ColorModeScript initialColorMode="light" />
+		<ThemeProvider defaultTheme="light" storageKey="todo-app-theme">
 			<App />
-		</ChakraProvider>
+			<Toaster richColors position="top-center" />
+		</ThemeProvider>
 	</React.StrictMode>
 );

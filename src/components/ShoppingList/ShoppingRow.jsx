@@ -1,16 +1,11 @@
 // src/components/ShoppingList/ShoppingRow.jsx
 
 import React from "react";
-import {
-  Tr,
-  Td,
-  Checkbox,
-  Text,
-  Input,
-  HStack,
-  IconButton,
-} from "@chakra-ui/react";
-import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import { Plus, Minus } from "lucide-react";
+import { Checkbox } from "../ui/checkbox";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { TableRow, TableCell } from "../ui/table";
 
 const ShoppingRow = ({
   item,
@@ -22,57 +17,62 @@ const ShoppingRow = ({
   onPriceBlur,
 }) => {
   return (
-    <Tr>
-      <Td p={1}>
+    <TableRow>
+      <TableCell className="p-2">
         <Checkbox
-          size="sm"
-          isChecked={item.completed}
-          onChange={() => onToggle(item.id)}
+          checked={item.completed}
+          onCheckedChange={() => onToggle(item.id)}
         />
-      </Td>
-      <Td >
-        <Text fontSize="xs" fontWeight={item.completed ? "bold" : "normal"}>
+      </TableCell>
+      <TableCell className="p-2">
+        <span className={`text-sm ${item.completed ? "font-bold" : "font-normal"}`}>
           {item.name}
-        </Text>
-      </Td>
-      <Td isNumeric p={1}>
-        <HStack spacing={1} justify="flex-end">
-          <IconButton
-            size="xs"
-            aria-label="Decrementar cantidad"
-            icon={<MinusIcon boxSize={3} />}
+        </span>
+      </TableCell>
+      <TableCell className="p-2">
+        <div className="flex items-center justify-end gap-1">
+          <Button
+            size="icon"
+            variant="outline"
+            className="h-7 w-7"
             onClick={() => onDecrement(item.id)}
-            isDisabled={!item.completed}
-          />
-          <Text width="16px" fontSize="sm" textAlign="center">
-            {item.quantity}
-          </Text>
-          <IconButton
-            size="xs"
-            aria-label="Incrementar cantidad"
-            icon={<AddIcon boxSize={3} />}
+            disabled={!item.completed}
+          >
+            <Minus className="h-3 w-3" />
+          </Button>
+          <span className="w-8 text-center text-sm">{item.quantity}</span>
+          <Button
+            size="icon"
+            variant="outline"
+            className="h-7 w-7"
             onClick={() => onIncrement(item.id)}
-            isDisabled={!item.completed}
-          />
-        </HStack>
-      </Td>
-      <Td isNumeric p={1}>
+            disabled={!item.completed}
+          >
+            <Plus className="h-3 w-3" />
+          </Button>
+        </div>
+      </TableCell>
+      <TableCell className="p-2">
         <Input
-          textAlign="right"
-          width="60px"
-          size="xs"
-          fontSize="xs"
-          type="number"
-          step="0.01"
+          type="text"
+          inputMode="decimal"
+          pattern="[0-9]*\.?[0-9]*"
+          className="text-right w-20 h-8 text-sm"
           value={item.price}
           placeholder="0.00"
-          isDisabled={!item.completed}
+          disabled={!item.completed}
           onFocus={() => onPriceFocus(item.id)}
-          onChange={(e) => onPriceChange(item.id, e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            // Allow only numbers and decimal point
+            if (value === '' || /^\d*\.?\d{0,2}$/.test(value)) {
+              onPriceChange(item.id, value);
+            }
+          }}
           onBlur={() => onPriceBlur(item.id)}
         />
-      </Td>
-    </Tr>
+      </TableCell>
+    </TableRow>
   );
 };
 

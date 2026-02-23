@@ -1,8 +1,9 @@
 import React from "react";
-import { VStack, Spacer, HStack, IconButton, Text, StackDivider, Badge } from "@chakra-ui/react";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import { Trash2, Edit2 } from "lucide-react";
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
 
-const TodoList = ({ todos, setTodos, deleteTodo, underlineTodo, colorMode, setEdit }) => {
+const TodoList = ({ todos, setTodos, deleteTodo, underlineTodo, setEdit }) => {
 	// Save reference for dragItem and dragOverItem
 	const dragItem = React.useRef();
 	const dragOverItem = React.useRef();
@@ -32,66 +33,58 @@ const TodoList = ({ todos, setTodos, deleteTodo, underlineTodo, colorMode, setEd
 
 	if (!todos.length) {
 		return (
-			<Badge colorScheme="green" p="4" m="4" borderRadius="lg">
-				No hay tareas!!!
-			</Badge>
+			<div className="flex justify-center p-8">
+				<div className="bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 px-6 py-3 rounded-lg font-medium">
+					No hay tareas!!!
+				</div>
+			</div>
 		);
 	}
 
 	return (
-		<VStack
-			maxW={["90vh", "80vw", "50vw", "40vw"]}
-			divider={<StackDivider />}
-			w="100%"
-			borderColor="gray.200"
-			borderWidth="2px"
-			borderRadius="lg"
-			p={4}
-			alignItems="stretch"
-		>
-			{todos.map((todo) => (
-				<HStack
-					key={todo.id}
-					//hacer elemento dragable
-					draggable="true"
-					onDragStart={(e) => (dragItem.current = todo.id)}
-					onDragEnter={(e) => (dragOverItem.current = todo.id)}
-					onDragEnd={handleDragSort}
-					// efecto mover elemento
-					transition="all 0.2s"
-					// quitar el cursor grab cuando se mueve el elemento
-
-					onDragOver={(e) => e.preventDefault()}
-					onDragLeave={(e) => e.preventDefault()}
-				>
-					<Text
-						onClick={() => underlineTodo(todo.id)}
-						textDecoration={todo.completed ? "line-through" : "none"}
-						fontWeight={todo.completed ? "normal" : "bold"}
-						// si todo.completed color = gray.400, si no color = gray.800 y en modo oscuro color white
-						color={colorMode === "light" ? (todo.completed ? "gray.400" : "gray.800") : todo.completed ? "gray.400" : "white"}
-						// {todo.completed ? "gray.700" : "gray.300"}
+		<Card className="w-full max-w-3xl mx-auto">
+			<div className="divide-y">
+				{todos.map((todo) => (
+					<div
+						key={todo.id}
+						draggable="true"
+						onDragStart={(e) => (dragItem.current = todo.id)}
+						onDragEnter={(e) => (dragOverItem.current = todo.id)}
+						onDragEnd={handleDragSort}
+						onDragOver={(e) => e.preventDefault()}
+						onDragLeave={(e) => e.preventDefault()}
+						className="flex items-center gap-3 p-4 transition-colors hover:bg-muted/50 cursor-move"
 					>
-						{todo.body}
-					</Text>
-					<Spacer />
-					<IconButton
-						icon={<FaEdit />}
-						color={colorMode === "light" ? "black" : "gray.200"}
-						isRound="true"
-						cursor="grab"
-						onClick={() => setEdit({ id: todo.id, body: todo.body })}
-					/>
-
-					<IconButton
-						icon={<FaTrash />}
-						color={colorMode === "light" ? "black" : "gray.200"}
-						isRound="true"
-						onClick={() => deleteTodo(todo.id)}
-					/>
-				</HStack>
-			))}
-		</VStack>
+						<p
+							onClick={() => underlineTodo(todo.id)}
+							className={`flex-1 cursor-pointer transition-all ${
+								todo.completed
+									? "line-through text-muted-foreground"
+									: "font-semibold text-foreground"
+							}`}
+						>
+							{todo.body}
+						</p>
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={() => setEdit({ id: todo.id, body: todo.body })}
+							className="shrink-0"
+						>
+							<Edit2 className="h-4 w-4" />
+						</Button>
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={() => deleteTodo(todo.id)}
+							className="shrink-0 text-destructive hover:text-destructive"
+						>
+							<Trash2 className="h-4 w-4" />
+						</Button>
+					</div>
+				))}
+			</div>
+		</Card>
 	);
 };
 export default TodoList;

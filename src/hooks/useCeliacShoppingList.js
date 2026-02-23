@@ -1,6 +1,6 @@
 // src/components/ShoppingList/useCeliacShoppingList.js
 import { useState, useEffect } from "react";
-import { useToast } from "@chakra-ui/react";
+import { toast } from "sonner";
 import { nanoid } from "nanoid";
 import celiacItemsData from "../data/celiacItems";
 import {
@@ -10,7 +10,6 @@ import {
 } from "../utils/shoppingListHelpers";
 
 const useCeliacShoppingList = () => {
-  const toast = useToast();
   const [isOpen, setIsOpen] = useState(false);
 
   // Ordenamos los items iniciales
@@ -118,13 +117,7 @@ const useCeliacShoppingList = () => {
 
   const handleAddItem = () => {
     if (newItemName.length < 3) {
-      toast({
-        title: "Nombre inválido",
-        description: "El nombre debe tener al menos 3 caracteres",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
+      toast.error("El nombre debe tener al menos 3 caracteres");
       return;
     }
 
@@ -139,25 +132,14 @@ const useCeliacShoppingList = () => {
 
     setItems((prev) => [newItem, ...prev]);
     setNewItemName("");
-    toast({
-      title: "Item agregado",
-      description: `"${newItemName}" fue añadido a la lista`,
-      status: "success",
-      duration: 2000,
-      isClosable: true,
-    });
+    toast.success(`"${newItemName}" fue añadido a la lista`);
   };
 
   const handleResetList = () => {
     localStorage.removeItem("celiacItems");
     setItems(initialItems);
     setIsOpen(false);
-    toast({
-      title: "Lista reiniciada",
-      status: "success",
-      duration: 2000,
-      isClosable: true,
-    });
+    toast.success("Lista reiniciada");
   };
 
   return {

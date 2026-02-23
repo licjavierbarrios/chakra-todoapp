@@ -1,20 +1,15 @@
 import React, { useState } from "react";
-import {
-  VStack,
-  HStack,
-  Text,
-  Checkbox,
-  Input,
-  Button,
-  useToast,
-} from "@chakra-ui/react";
+import { toast } from "sonner";
+import { Checkbox } from "./ui/checkbox";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
 import campingItems from "../data/campingItems";
 import { nanoid } from "nanoid";
 
 const CampingList = () => {
   const [items, setItems] = useState(campingItems);
   const [newItemName, setNewItemName] = useState("");
-  const toast = useToast();
 
   const toggleItemCompletion = (id) => {
     setItems(
@@ -26,13 +21,7 @@ const CampingList = () => {
 
   const handleAddItem = () => {
     if (newItemName.length < 3) {
-      toast({
-        title: "Nombre inválido.",
-        description: "El nombre del ítem debe tener al menos 3 caracteres.",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
+      toast.error("El nombre del ítem debe tener al menos 3 caracteres.");
       return;
     }
 
@@ -42,42 +31,40 @@ const CampingList = () => {
       completed: false,
     };
     setItems([newItem, ...items]);
-    setNewItemName(""); // Limpiar el input después de agregar el ítem
-    toast({
-      title: "Item agregado.",
-      description: `Se ha agregado "${newItemName}" a la lista.`,
-      status: "success",
-      duration: 2000,
-      isClosable: true,
-    });
+    setNewItemName("");
+    toast.success(`"${newItemName}" fue agregado a la lista`);
   };
 
   return (
-    <VStack spacing={4} align="stretch">
-      <HStack>
+    <div className="space-y-4">
+      <div className="flex gap-2">
         <Input
           placeholder="Nombre del ítem"
           value={newItemName}
           onChange={(e) => setNewItemName(e.target.value)}
+          className="flex-1"
         />
-        <Button colorScheme="teal" onClick={handleAddItem}>
+        <Button onClick={handleAddItem}>
           Agregar
         </Button>
-      </HStack>
+      </div>
 
-      {items.map((item) => (
-        <HStack key={item.id} borderWidth="1px" borderRadius="md" p={2}>
-          <Checkbox
-            isChecked={item.completed}
-            onChange={() => toggleItemCompletion(item.id)}
-          >
-            <Text fontWeight={item.completed ? "bold" : "normal"}>
-              {item.name}
-            </Text>
-          </Checkbox>
-        </HStack>
-      ))}
-    </VStack>
+      <div className="space-y-2">
+        {items.map((item) => (
+          <Card key={item.id} className="p-4">
+            <div className="flex items-center gap-3">
+              <Checkbox
+                checked={item.completed}
+                onCheckedChange={() => toggleItemCompletion(item.id)}
+              />
+              <span className={item.completed ? "font-bold" : "font-normal"}>
+                {item.name}
+              </span>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
   );
 };
 

@@ -1,7 +1,13 @@
 // src/components/ShoppingList/ShoppingTable.jsx
 
 import React from "react";
-import { Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import ShoppingRow from "./ShoppingRow";
 
 const ShoppingTable = ({
@@ -14,24 +20,16 @@ const ShoppingTable = ({
   onPriceBlur,
 }) => {
   return (
-    <Table variant="simple" size="sm" width="100%" tableLayout="fixed">
-      <Thead>
-        <Tr>
-          <Th width="5%" textAlign="center" p={1}>
-            ✓
-          </Th>
-          <Th width="45%" p={1}>
-            Item
-          </Th>
-          <Th width="20%" isNumeric p={1}>
-            Cant.
-          </Th>
-          <Th width="20%" isNumeric p={1}>
-            Precio
-          </Th>
-        </Tr>
-      </Thead>
-      <Tbody>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[5%] text-center p-2">✓</TableHead>
+          <TableHead className="w-[45%] p-2">Item</TableHead>
+          <TableHead className="w-[25%] text-right p-2">Cant.</TableHead>
+          <TableHead className="w-[25%] text-right p-2">Precio</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {items.map((item) => (
           <ShoppingRow
             key={item.id}
@@ -44,7 +42,7 @@ const ShoppingTable = ({
             onPriceBlur={onPriceBlur}
           />
         ))}
-      </Tbody>
+      </TableBody>
     </Table>
   );
 };
